@@ -9,91 +9,50 @@
 #include <TStyle.h>
 #include <algorithm>
 
+
+#include <fstream>
+#include <map>
+#include <stdexcept>
+#include <string>
+
 using namespace ROOT;
 using namespace ROOT::VecOps;
 
-const double kHiggsMass = 125.0;
-const double kWMass = 80.4;
+#include "Reconstruction.h"
+#include "AnalysisFeatures.h"
+#include "DatasetConfig.h"
 
-double Reconstructor(double targetMass, const RVecF &pt, const RVecF &eta, const RVecF &phi, const RVecF &mass) {
-   auto idx_cmb = Combinations(pt, 2);
-   float bestM = -1;
-   double bestDiff = 1e9;
-   for (size_t i = 0; i < idx_cmb[0].size(); i++) {
-      const auto i1 = idx_cmb[0][i];
-      const auto i2 = idx_cmb[1][i];
-      ROOT::Math::PtEtaPhiMVector p1(pt[i1], eta[i1], phi[i1], mass[i1]);
-      ROOT::Math::PtEtaPhiMVector p2(pt[i2], eta[i2], phi[i2], mass[i2]);
-      double m = (p1 + p2).M();
-      if (std::abs(m - targetMass) < bestDiff) {
-         bestDiff = std::abs(m - targetMass);
-         bestM = m;
-      }
-   }
-   return bestM;
-}
+int Plotter(const char *configFile = "config/datasets.txt") {
+    auto paths = ReadDatasetPaths(configFile);
 
-ROOT::RDF::RNode AddBJetVars(ROOT::RDF::RNode df) {
-   return df.Define("isBJet",     "Jet_btagUParTAK4B > 0.1272")
-            .Define("nBJets",     "Sum(isBJet)")
-            .Define("bJet_pt",    "Jet_pt[isBJet]")
-            .Define("bJet_eta",   "Jet_eta[isBJet]")
-            .Define("bJet_phi",   "Jet_phi[isBJet]")
-            .Define("bJet_mass",  "Jet_mass[isBJet]")
-            .Define("isNotBJet",  "!isBJet")
-            .Define("lJet_pt",    "Jet_pt[isNotBJet]")
-            .Define("lJet_eta",   "Jet_eta[isNotBJet]")
-            .Define("lJet_phi",   "Jet_phi[isNotBJet]")
-            .Define("lJet_mass",  "Jet_mass[isNotBJet]");
-}
-
-ROOT::RDF::RNode Mbb(ROOT::RDF::RNode df) {
-   return df.Filter("bJet_pt.size() >= 2", "At least two b-tagged jets")
-            .Define("m_bb",
-                [](const RVecF &pt, const RVecF &eta, const RVecF &phi, const RVecF &mass) {
-                   return Reconstructor(kHiggsMass, pt, eta, phi, mass);
-                },
-                {"bJet_pt", "bJet_eta", "bJet_phi", "bJet_mass"});
-}
-
-ROOT::RDF::RNode WHad(ROOT::RDF::RNode df) {
-   return df.Filter("lJet_pt.size() >= 2", "At least two non-b-tagged jets")
-            .Define("m_W_had",
-                [](const RVecF &pt, const RVecF &eta, const RVecF &phi, const RVecF &mass) {
-                   return Reconstructor(kWMass, pt, eta, phi, mass);
-                },
-                {"lJet_pt", "lJet_eta", "lJet_phi", "lJet_mass"});
-}
-
-int Plotter() {
    ROOT::EnableImplicitMT();
    gStyle->SetOptStat(0);
 
-   std::string dir_ttHH = "/data2/common/NanoAOD/mc/v15/RunIII2024Summer24NanoAODv15/TTHH-TTto2L2Nu-HHto2B2W_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/*/*.root";
+    std::string dir_ttHH = paths.at("ttHH");
 
-   std::string dir_HH = "/data2/common/NanoAOD/mc/v15/RunIII2024Summer24NanoAODv15/GluGlutoHHto2B2WtoLNu2Q_Par-c2-0p00-kl-1p00-kt-1p00_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v2/*/*.root";
+    std::string dir_HH = paths.at("HH");
 
-   std::string dir_ttbar = "/data2/common/NanoAOD/mc/v15/RunIII2024Summer24NanoAODv15/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/150X_mcRun3_2024_realistic_v2-v3/*/*.root";
+    std::string dir_ttbar = paths.at("ttbar");
 
    auto df_ttHH  = AddBJetVars(ROOT::RDataFrame("Events", dir_ttHH));
    auto df_HH    = AddBJetVars(ROOT::RDataFrame("Events", dir_HH));
    auto df_ttbar = AddBJetVars(ROOT::RDataFrame("Events", dir_ttbar));
 
-   auto hMuonPt_ttHH  = df_ttHH.Histo1D({"hMuonPt_ttHH", "Muon p_{T};Muon p_{T} [GeV];Normalized Events", 50, 0., 200.}, "Muon_pt", "genWeight");
-   auto hJetPt_ttHH   = df_ttHH.Histo1D({"hJetPt_ttHH", "Jet p_{T};Jet p_{T} [GeV];Normalized Events", 50, 0., 300.}, "Jet_pt", "genWeight");
-   auto hNJets_ttHH   = df_ttHH.Histo1D({"hNJets_ttHH", "Number of Jets;No. Jets;Normalized Events", 20, -0.5, 19.5}, "nJet", "genWeight");
+   auto hMuonPt_ttHH  = df_ttHH.Histo1D({"hMuonPt_ttHH", "Muon p_{T};Muon p_{T} [GeV];Normalized Events", 50, 0., 200.}, "selectedMuon_pt", "genWeight");
+   auto hJetPt_ttHH   = df_ttHH.Histo1D({"hJetPt_ttHH", "Jet p_{T};Jet p_{T} [GeV];Normalized Events", 50, 0., 300.}, "selectedJet_pt", "genWeight");
+   auto hNJets_ttHH   = df_ttHH.Histo1D({"hNJets_ttHH", "Number of Jets;No. Jets;Normalized Events", 20, -0.5, 19.5}, "nSelectedJet", "genWeight");
    auto hNBJets_ttHH  = df_ttHH.Histo1D({"hNBJets_ttHH", "Number of b-Jets;No. b-Jets;Normalized Events", 6, -0.5, 5.5}, "nBJets", "genWeight");
    auto hMET_ttHH     = df_ttHH.Histo1D({"hMET_ttHH", "Missing Transverse Energy;MET [GeV];Normalized Events", 50, 0., 300.}, "PuppiMET_pt", "genWeight");
 
-   auto hMuonPt_HH  = df_HH.Histo1D({"hMuonPt_HH", "Muon p_{T};Muon p_{T} [GeV];Normalized Events", 50, 0., 200.}, "Muon_pt", "genWeight");
-   auto hJetPt_HH   = df_HH.Histo1D({"hJetPt_HH", "Jet p_{T};Jet p_{T} [GeV];Normalized Events", 50, 0., 300.}, "Jet_pt", "genWeight");
-   auto hNJets_HH   = df_HH.Histo1D({"hNJets_HH", "Number of Jets;No. Jets;Normalized Events", 10, -0.5, 9.5}, "nJet", "genWeight");
+   auto hMuonPt_HH  = df_HH.Histo1D({"hMuonPt_HH", "Muon p_{T};Muon p_{T} [GeV];Normalized Events", 50, 0., 200.}, "selectedMuon_pt", "genWeight");
+   auto hJetPt_HH   = df_HH.Histo1D({"hJetPt_HH", "Jet p_{T};Jet p_{T} [GeV];Normalized Events", 50, 0., 300.}, "selectedJet_pt", "genWeight");
+   auto hNJets_HH   = df_HH.Histo1D({"hNJets_HH", "Number of Jets;No. Jets;Normalized Events", 20, -0.5, 19.5}, "nSelectedJet", "genWeight");
    auto hNBJets_HH  = df_HH.Histo1D({"hNBJets_HH", "Number of b-Jets;No. b-Jets;Normalized Events", 6, -0.5, 5.5}, "nBJets", "genWeight");
    auto hMET_HH     = df_HH.Histo1D({"hMET_HH", "Missing Transverse Energy;MET [GeV];Normalized Events", 50, 0., 300.}, "PuppiMET_pt", "genWeight");
 
-   auto hMuonPt_ttbar  = df_ttbar.Histo1D({"hMuonPt_ttbar", "Muon p_{T};Muon p_{T} [GeV];Normalized Events", 50, 0., 200.}, "Muon_pt", "genWeight");
-   auto hJetPt_ttbar   = df_ttbar.Histo1D({"hJetPt_ttbar", "Jet p_{T};Jet p_{T} [GeV];Normalized Events", 50, 0., 300.}, "Jet_pt", "genWeight");
-   auto hNJets_ttbar   = df_ttbar.Histo1D({"hNJets_ttbar", "Number of Jets;No. Jets;Normalized Events", 10, -0.5, 9.5}, "nJet", "genWeight");
+   auto hMuonPt_ttbar  = df_ttbar.Histo1D({"hMuonPt_ttbar", "Muon p_{T};Muon p_{T} [GeV];Normalized Events", 50, 0., 200.}, "selectedMuon_pt", "genWeight");
+   auto hJetPt_ttbar   = df_ttbar.Histo1D({"hJetPt_ttbar", "Jet p_{T};Jet p_{T} [GeV];Normalized Events", 50, 0., 300.}, "selectedJet_pt", "genWeight");
+   auto hNJets_ttbar   = df_ttbar.Histo1D({"hNJets_ttbar", "Number of Jets;No. Jets;Normalized Events", 20, -0.5, 19.5}, "nSelectedJet", "genWeight");
    auto hNBJets_ttbar  = df_ttbar.Histo1D({"hNBJets_ttbar", "Number of b-Jets;No. b-Jets;Normalized Events", 6, -0.5, 5.5}, "nBJets", "genWeight");
    auto hMET_ttbar     = df_ttbar.Histo1D({"hMET_ttbar", "Missing Transverse Energy;MET [GeV];Normalized Events", 50, 0., 300.}, "PuppiMET_pt", "genWeight");
 
@@ -111,11 +70,178 @@ int Plotter() {
    auto hWHad_ttbar = WHad(df_ttbar).Histo1D(
        {"hWHad_ttbar", "Hadronic W candidate mass;m_{jj} [GeV];Normalized Events", 50, 0., 200.}, "m_W_had", "genWeight");
 
+
+   // Global event activity: HT and ST
+
+   auto hHT_ttHH = df_ttHH.Histo1D(
+       {"hHT_ttHH", "HT;HT [GeV];Normalized Events",
+         60, 0., 1500.}, "HT", "genWeight");
+
+   auto hHT_HH = df_HH.Histo1D(
+       {"hHT_HH", "HT;HT [GeV];Normalized Events",
+         60, 0., 1500.}, "HT", "genWeight");
+
+   auto hHT_ttbar = df_ttbar.Histo1D(
+       {"hHT_ttbar", "HT;HT [GeV];Normalized Events",
+         60, 0., 1500.}, "HT", "genWeight");
+
+   auto hST_ttHH = df_ttHH.Histo1D(
+       {"hST_ttHH", "ST;ST [GeV];Normalized Events",
+         60, 0., 2000.}, "ST", "genWeight");
+
+   auto hST_HH = df_HH.Histo1D(
+       {"hST_HH", "ST;ST [GeV];Normalized Events",
+         60, 0., 2000.}, "ST", "genWeight");
+
+   auto hST_ttbar = df_ttbar.Histo1D(
+       {"hST_ttbar", "ST;ST [GeV];Normalized Events",
+         60, 0., 2000.}, "ST", "genWeight");
+
+
+   // Individual object and angular features
+
+   auto h_leading_jet_pt_ttHH = df_ttHH.Histo1D(
+       {"h_leading_jet_pt_ttHH", "leading_jet_pt;leading_jet_pt;Normalized Events",
+         50, 0., 300.}, "leading_jet_pt", "genWeight");
+
+   auto h_leading_jet_pt_HH = df_HH.Histo1D(
+       {"h_leading_jet_pt_HH", "leading_jet_pt;leading_jet_pt;Normalized Events",
+         50, 0., 300.}, "leading_jet_pt", "genWeight");
+
+   auto h_leading_jet_pt_ttbar = df_ttbar.Histo1D(
+       {"h_leading_jet_pt_ttbar", "leading_jet_pt;leading_jet_pt;Normalized Events",
+         50, 0., 300.}, "leading_jet_pt", "genWeight");
+
+   auto h_subleading_jet_pt_ttHH = df_ttHH.Histo1D(
+       {"h_subleading_jet_pt_ttHH", "subleading_jet_pt;subleading_jet_pt;Normalized Events",
+         50, 0., 300.}, "subleading_jet_pt", "genWeight");
+
+   auto h_subleading_jet_pt_HH = df_HH.Histo1D(
+       {"h_subleading_jet_pt_HH", "subleading_jet_pt;subleading_jet_pt;Normalized Events",
+         50, 0., 300.}, "subleading_jet_pt", "genWeight");
+
+   auto h_subleading_jet_pt_ttbar = df_ttbar.Histo1D(
+       {"h_subleading_jet_pt_ttbar", "subleading_jet_pt;subleading_jet_pt;Normalized Events",
+         50, 0., 300.}, "subleading_jet_pt", "genWeight");
+
+   auto h_leading_lepton_pt_ttHH = df_ttHH.Histo1D(
+       {"h_leading_lepton_pt_ttHH", "leading_lepton_pt;leading_lepton_pt;Normalized Events",
+         50, 0., 200.}, "leading_lepton_pt", "genWeight");
+
+   auto h_leading_lepton_pt_HH = df_HH.Histo1D(
+       {"h_leading_lepton_pt_HH", "leading_lepton_pt;leading_lepton_pt;Normalized Events",
+         50, 0., 200.}, "leading_lepton_pt", "genWeight");
+
+   auto h_leading_lepton_pt_ttbar = df_ttbar.Histo1D(
+       {"h_leading_lepton_pt_ttbar", "leading_lepton_pt;leading_lepton_pt;Normalized Events",
+         50, 0., 200.}, "leading_lepton_pt", "genWeight");
+
+   auto h_deltaR_bb_leading_ttHH = df_ttHH.Histo1D(
+       {"h_deltaR_bb_leading_ttHH", "deltaR_bb_leading;deltaR_bb_leading;Normalized Events",
+         50, 0., 6.}, "deltaR_bb_leading", "genWeight");
+
+   auto h_deltaR_bb_leading_HH = df_HH.Histo1D(
+       {"h_deltaR_bb_leading_HH", "deltaR_bb_leading;deltaR_bb_leading;Normalized Events",
+         50, 0., 6.}, "deltaR_bb_leading", "genWeight");
+
+   auto h_deltaR_bb_leading_ttbar = df_ttbar.Histo1D(
+       {"h_deltaR_bb_leading_ttbar", "deltaR_bb_leading;deltaR_bb_leading;Normalized Events",
+         50, 0., 6.}, "deltaR_bb_leading", "genWeight");
+
+
+   // Additional bb reconstruction plots
+
+   auto h_m_bb_leading_ttHH = df_ttHH
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_m_bb_leading_ttHH", "m_bb_leading;m_bb_leading [GeV];Normalized Events",
+             50, 0., 300.0},
+           "m_bb_leading", "genWeight");
+
+   auto h_m_bb_leading_HH = df_HH
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_m_bb_leading_HH", "m_bb_leading;m_bb_leading [GeV];Normalized Events",
+             50, 0., 300.0},
+           "m_bb_leading", "genWeight");
+
+   auto h_m_bb_leading_ttbar = df_ttbar
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_m_bb_leading_ttbar", "m_bb_leading;m_bb_leading [GeV];Normalized Events",
+             50, 0., 300.0},
+           "m_bb_leading", "genWeight");
+
+   auto h_pt_bb_ttHH = df_ttHH
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_pt_bb_ttHH", "pt_bb;pt_bb [GeV];Normalized Events",
+             50, 0., 500.0},
+           "pt_bb", "genWeight");
+
+   auto h_pt_bb_HH = df_HH
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_pt_bb_HH", "pt_bb;pt_bb [GeV];Normalized Events",
+             50, 0., 500.0},
+           "pt_bb", "genWeight");
+
+   auto h_pt_bb_ttbar = df_ttbar
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_pt_bb_ttbar", "pt_bb;pt_bb [GeV];Normalized Events",
+             50, 0., 500.0},
+           "pt_bb", "genWeight");
+
+   auto h_deltaR_bb_Hcand_ttHH = df_ttHH
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_deltaR_bb_Hcand_ttHH", "deltaR_bb_Hcand;deltaR_bb_Hcand;Normalized Events",
+             50, 0., 6.0},
+           "deltaR_bb_Hcand", "genWeight");
+
+   auto h_deltaR_bb_Hcand_HH = df_HH
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_deltaR_bb_Hcand_HH", "deltaR_bb_Hcand;deltaR_bb_Hcand;Normalized Events",
+             50, 0., 6.0},
+           "deltaR_bb_Hcand", "genWeight");
+
+   auto h_deltaR_bb_Hcand_ttbar = df_ttbar
+       .Filter("nBJets >= 2")
+       .Histo1D(
+           {"h_deltaR_bb_Hcand_ttbar", "deltaR_bb_Hcand;deltaR_bb_Hcand;Normalized Events",
+             50, 0., 6.0},
+           "deltaR_bb_Hcand", "genWeight");
+
    ROOT::RDF::RunGraphs({hMuonPt_ttHH, hJetPt_ttHH, hNJets_ttHH, hNBJets_ttHH, hMET_ttHH,
                          hMuonPt_HH, hJetPt_HH, hNJets_HH, hNBJets_HH, hMET_HH,
                          hMuonPt_ttbar, hJetPt_ttbar, hNJets_ttbar, hNBJets_ttbar, hMET_ttbar,
                          hMbb_ttHH, hMbb_HH, hMbb_ttbar,
-                         hWHad_ttHH, hWHad_HH, hWHad_ttbar});
+                         hWHad_ttHH, hWHad_HH, hWHad_ttbar,
+                         hHT_ttHH, hHT_HH, hHT_ttbar,
+                         hST_ttHH, hST_HH, hST_ttbar,
+                         h_leading_jet_pt_ttHH,
+                         h_leading_jet_pt_HH,
+                         h_leading_jet_pt_ttbar,
+                         h_subleading_jet_pt_ttHH,
+                         h_subleading_jet_pt_HH,
+                         h_subleading_jet_pt_ttbar,
+                         h_leading_lepton_pt_ttHH,
+                         h_leading_lepton_pt_HH,
+                         h_leading_lepton_pt_ttbar,
+                         h_deltaR_bb_leading_ttHH,
+                         h_deltaR_bb_leading_HH,
+                         h_deltaR_bb_leading_ttbar,
+                         h_m_bb_leading_ttHH,
+                         h_m_bb_leading_HH,
+                         h_m_bb_leading_ttbar,
+                         h_pt_bb_ttHH,
+                         h_pt_bb_HH,
+                         h_pt_bb_ttbar,
+                         h_deltaR_bb_Hcand_ttHH,
+                         h_deltaR_bb_Hcand_HH,
+                         h_deltaR_bb_Hcand_ttbar});
 
    TCanvas c("c", "c", 800, 600);
    c.Print("results.pdf[");
@@ -156,6 +282,48 @@ int Plotter() {
    drawOverlay(hMET_ttHH.GetPtr(), hMET_HH.GetPtr(), hMET_ttbar.GetPtr(), true);
    drawOverlay(hMbb_ttHH.GetPtr(), hMbb_HH.GetPtr(), hMbb_ttbar.GetPtr(), false);
    drawOverlay(hWHad_ttHH.GetPtr(), hWHad_HH.GetPtr(), hWHad_ttbar.GetPtr(), false);
+
+   drawOverlay(hHT_ttHH.GetPtr(), hHT_HH.GetPtr(),
+               hHT_ttbar.GetPtr(), true);
+   drawOverlay(hST_ttHH.GetPtr(), hST_HH.GetPtr(),
+               hST_ttbar.GetPtr(), true);
+
+
+   drawOverlay(
+       h_leading_jet_pt_ttHH.GetPtr(),
+       h_leading_jet_pt_HH.GetPtr(),
+       h_leading_jet_pt_ttbar.GetPtr(), false);
+
+   drawOverlay(
+       h_subleading_jet_pt_ttHH.GetPtr(),
+       h_subleading_jet_pt_HH.GetPtr(),
+       h_subleading_jet_pt_ttbar.GetPtr(), false);
+
+   drawOverlay(
+       h_leading_lepton_pt_ttHH.GetPtr(),
+       h_leading_lepton_pt_HH.GetPtr(),
+       h_leading_lepton_pt_ttbar.GetPtr(), false);
+
+   drawOverlay(
+       h_deltaR_bb_leading_ttHH.GetPtr(),
+       h_deltaR_bb_leading_HH.GetPtr(),
+       h_deltaR_bb_leading_ttbar.GetPtr(), false);
+
+
+   drawOverlay(
+       h_m_bb_leading_ttHH.GetPtr(),
+       h_m_bb_leading_HH.GetPtr(),
+       h_m_bb_leading_ttbar.GetPtr(), false);
+
+   drawOverlay(
+       h_pt_bb_ttHH.GetPtr(),
+       h_pt_bb_HH.GetPtr(),
+       h_pt_bb_ttbar.GetPtr(), false);
+
+   drawOverlay(
+       h_deltaR_bb_Hcand_ttHH.GetPtr(),
+       h_deltaR_bb_Hcand_HH.GetPtr(),
+       h_deltaR_bb_Hcand_ttbar.GetPtr(), false);
 
    c.Print("results.pdf]");
 

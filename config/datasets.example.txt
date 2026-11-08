@@ -1,0 +1,7 @@
+# Dataset paths for Plotter.C
+# Replace these paths with actual accessible NanoAOD files.
+# ROOT file patterns such as *.root are supported.
+
+ttHH=/path/to/ttHH/*.root
+HH=/path/to/HH/*.root
+ttbar=/path/to/ttbar/*.root
