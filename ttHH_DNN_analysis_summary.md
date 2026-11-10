@@ -58,17 +58,23 @@ b-jet pair 6개 + non-b jet pair 6개를 기존 8개 변수에 더해 **총 20-f
 | 777 | 0.94578 | 0.95265 | +0.00687 |
 | 31415 | 0.94602 | 0.95257 | +0.00655 |
 
-평균 개선량은 **\(\Delta\mathrm{AUC}=0.00681\pm0.00017\)**이며, `±`는 반복 학습 간 **표준편차(run-to-run SD)**다. 5번 모두 개선됐다. 이 값은 물리적 측정 오차나 독립적인 test 표본에 대한 신뢰구간은 아니다.
+평균 개선량은 **$\Delta\mathrm{AUC}=0.00681\pm0.00017$**이며, 이는 물리적 측정 오차나 독립적인 test 표본에 대한 신뢰구간은 아니다. `±`는 반복 학습 간 **표준편차(run-to-run SD)**다. 5번 모두 개선됐다.
 
 ## 5. DNN score 기반 선택 효율
 
 3-class softmax 중 **ttHH score 하나**를 선택 기준으로 삼았다. MC의 실제 process가 무엇이든 같은 조건 \(s_{\mathrm{ttHH}}>c\)를 적용한다. 먼저 held-out test MC에서 ttHH 보존율 90%, 80%, 70%, 50%에 대응하는 score cut을 정하고 HH/ttbar 통과율을 비교했다.
 
-이후 **전체 481,311,216개 MC 이벤트**에 기존 20-feature 모델을 적용해 signed `genWeight`를 반영한 효율을 계산했다.
+이후 **전체 481,311,216개 MC 이벤트**에 기존 20-feature 모델을 적용해
+signed `genWeight`를 반영한 효율을 계산했다.
 
-\[
-\epsilon_k^{w}(c)=\frac{\sum_{i\in k,\,s_i>c}w_i^{\mathrm{gen}}}{\sum_{i\in k}w_i^{\mathrm{gen}}},\qquad R_B^w(c)=1-\epsilon_B^w(c).
-\]
+$$
+\epsilon_k^{(w)}(c)
+=
+\frac{\sum_{i\in k,\;s_i>c} w_i^{\mathrm{gen}}}
+{\sum_{i\in k} w_i^{\mathrm{gen}}},
+\qquad
+R_B^{(w)}(c)=1-\epsilon_B^{(w)}(c).
+$$
 
 | 기존 test 목표 | Score cut | 전체 ttHH 보존율 | 전체 HH 제거율 | 전체 ttbar 제거율 |
 |---|---:|---:|---:|---:|
@@ -87,7 +93,22 @@ b-jet pair 6개 + non-b jet pair 6개를 기존 8개 변수에 더해 **총 20-f
 
 Generator 설정에서 **ttHH는 top dilepton(`includeTau`) gridpack과 Higgs `bbWW` 선택**, **HH는 `bbWW→bbℓνqq` 형태의 resonance decay filter**, **ttbar는 `TTto2L2Nu` 전용 POWHEG gridpack**을 사용하는 것을 확인했다. 정확한 생성 단계의 branching fraction·filter normalization은 추가 검증이 필요하다.
 
-외부 이론적 inclusive cross section과 붕괴비를 곱하는 **예시 가정**을 사용해 100 fb\(^{-1}\)에서 cut `0.561638`의 수율을 잠정 계산했다. 추정치는 **ttHH 약 1.83건, HH 약 12.9건, ttbar 약 64만 건**이며, 세 process만 고려한 \(S/B\)는 약 **\(2.85\times10^{-6}\)**이었다. **이는 확정된 CMS MC 정규화값이나 실제 데이터의 신호 순도가 아니다.** 특히 붕괴 채널, generator filter와 cross section 정의가 확정되지 않았고 다른 background가 빠져 있다.
+일부 이론적 inclusive cross section과 붕괴비를 곱하는 **예시 가정**을 사용해
+$100\,\mathrm{fb}^{-1}$에서 score cut $c=0.561638$의 수율을 잠정 계산했다.
+
+추정치는 **ttHH 약 1.83건, HH 약 12.9건, ttbar 약 64만 건**이며,
+세 process만 고려한 신호 대 배경비는
+
+$$
+\frac{S}{B}\approx 2.85\times10^{-6}
+$$
+
+이었다.
+
+이는 확정된 CMS MC 정규화 값이나 실제 데이터의 신호 순도가 아니다.
+특히 붕괴 채널, generator filter와 cross section 정의가 확정되지 않았고
+다른 background가 빠져 있다.
+
 
 ## 7. 현재 결론과 다음 단계
 
