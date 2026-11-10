@@ -1,0 +1,176 @@
+{
+  "seed": 42,
+  "quotas": {
+    "train": 80000,
+    "val": 20000,
+    "test": 20000
+  },
+  "models": {
+    "A_basic": {
+      "features": [
+        "nSelectedJet",
+        "nBJets",
+        "HT",
+        "ST",
+        "PuppiMET_pt",
+        "leading_jet_pt",
+        "subleading_jet_pt",
+        "leading_lepton_pt"
+      ],
+      "ttHH_auc": 0.9442835675,
+      "accuracy": 0.7474,
+      "ttHH_recall": 0.82875,
+      "best_val_loss": 0.5770899653434753,
+      "class_report": {
+        "ttHH": {
+          "precision": 0.822376581493426,
+          "recall": 0.82875,
+          "f1-score": 0.8255509899140829,
+          "support": 20000.0
+        },
+        "HH": {
+          "precision": 0.6936524644181045,
+          "recall": 0.75785,
+          "f1-score": 0.7243315571909871,
+          "support": 20000.0
+        },
+        "ttbar": {
+          "precision": 0.7286873402245193,
+          "recall": 0.6556,
+          "f1-score": 0.6902142443543717,
+          "support": 20000.0
+        },
+        "accuracy": 0.7474,
+        "macro avg": {
+          "precision": 0.7482387953786832,
+          "recall": 0.7474,
+          "f1-score": 0.7466989304864805,
+          "support": 60000.0
+        },
+        "weighted avg": {
+          "precision": 0.7482387953786832,
+          "recall": 0.7474,
+          "f1-score": 0.7466989304864806,
+          "support": 60000.0
+        }
+      }
+    },
+    "B_bb_pairs": {
+      "features": [
+        "nSelectedJet",
+        "nBJets",
+        "HT",
+        "ST",
+        "PuppiMET_pt",
+        "leading_jet_pt",
+        "subleading_jet_pt",
+        "leading_lepton_pt",
+        "bb_min_mass",
+        "bb_mean_mass",
+        "bb_max_mass",
+        "bb_min_deltaR",
+        "bb_mean_deltaR",
+        "bb_max_deltaR"
+      ],
+      "ttHH_auc": 0.9499781137500001,
+      "accuracy": 0.7769833333333334,
+      "ttHH_recall": 0.8343,
+      "best_val_loss": 0.521917462348938,
+      "class_report": {
+        "ttHH": {
+          "precision": 0.8427698368604475,
+          "recall": 0.8343,
+          "f1-score": 0.8385135304907159,
+          "support": 20000.0
+        },
+        "HH": {
+          "precision": 0.7451968355622528,
+          "recall": 0.79125,
+          "f1-score": 0.7675332233970317,
+          "support": 20000.0
+        },
+        "ttbar": {
+          "precision": 0.7438966517268653,
+          "recall": 0.7054,
+          "f1-score": 0.7241370460669831,
+          "support": 20000.0
+        },
+        "accuracy": 0.7769833333333334,
+        "macro avg": {
+          "precision": 0.7772877747165219,
+          "recall": 0.7769833333333334,
+          "f1-score": 0.7767279333182436,
+          "support": 60000.0
+        },
+        "weighted avg": {
+          "precision": 0.7772877747165219,
+          "recall": 0.7769833333333334,
+          "f1-score": 0.7767279333182435,
+          "support": 60000.0
+        }
+      }
+    },
+    "C_all_pairs": {
+      "features": [
+        "nSelectedJet",
+        "nBJets",
+        "HT",
+        "ST",
+        "PuppiMET_pt",
+        "leading_jet_pt",
+        "subleading_jet_pt",
+        "leading_lepton_pt",
+        "bb_min_mass",
+        "bb_mean_mass",
+        "bb_max_mass",
+        "bb_min_deltaR",
+        "bb_mean_deltaR",
+        "bb_max_deltaR",
+        "jj_min_mass",
+        "jj_mean_mass",
+        "jj_max_mass",
+        "jj_min_deltaR",
+        "jj_mean_deltaR",
+        "jj_max_deltaR"
+      ],
+      "ttHH_auc": 0.951793474375,
+      "accuracy": 0.78155,
+      "ttHH_recall": 0.8389,
+      "best_val_loss": 0.5135291814804077,
+      "class_report": {
+        "ttHH": {
+          "precision": 0.8460917801311145,
+          "recall": 0.8389,
+          "f1-score": 0.8424805423047954,
+          "support": 20000.0
+        },
+        "HH": {
+          "precision": 0.7582587666263604,
+          "recall": 0.78385,
+          "f1-score": 0.7708420405654579,
+          "support": 20000.0
+        },
+        "ttbar": {
+          "precision": 0.7406001538856117,
+          "recall": 0.7219,
+          "f1-score": 0.7311305228509938,
+          "support": 20000.0
+        },
+        "accuracy": 0.78155,
+        "macro avg": {
+          "precision": 0.7816502335476955,
+          "recall": 0.7815499999999999,
+          "f1-score": 0.781484368573749,
+          "support": 60000.0
+        },
+        "weighted avg": {
+          "precision": 0.7816502335476956,
+          "recall": 0.78155,
+          "f1-score": 0.7814843685737489,
+          "support": 60000.0
+        }
+      }
+    }
+  },
+  "note": "Unweighted class-balanced MC; same sampled events for all models; one training seed."
+}

@@ -13,13 +13,13 @@ using namespace ROOT::VecOps;
 inline ROOT::RDF::RNode AddBJetVars(ROOT::RDF::RNode df) {
    return df
              .Define("muMask",
-                 Selection::MuonMask<int>,
+                 Selection::MuonMask<bool>,
                  {"Muon_pt", "Muon_eta",
                   "Muon_mediumId",
                   "Muon_pfRelIso04_all"})
 
              .Define("elMask",
-                 Selection::ElectronMask<int>,
+                 Selection::ElectronMask<unsigned char>,
                  {"Electron_pt", "Electron_eta",
                   "Electron_cutBased"})
 
@@ -38,9 +38,8 @@ inline ROOT::RDF::RNode AddBJetVars(ROOT::RDF::RNode df) {
                  "Electron_phi[elMask]")
 
              .Define("jetMask",
-                 Selection::JetMask<int>,
+                 Selection::JetMaskNoId,
                  {"Jet_pt", "Jet_eta", "Jet_phi",
-                  "Jet_jetId",
                   "selectedMuon_eta",
                   "selectedMuon_phi",
                   "selectedElectron_eta",

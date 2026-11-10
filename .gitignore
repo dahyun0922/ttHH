@@ -1,0 +1,31 @@
+
+/cache/
+
+# Slurm logs
+/logs/
+
+# Generated PDF outputs
+/results.pdf
+/results/**/*.pdf
+
+# Temporary editor and backup files
+*~
+*.swp
+*.bak
+
+/.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# ROOT and trained models
+*.root
+*.keras
+*.npz
+
+# Slurm outputs
+slurm-*.out
+
+# Full-MC intermediate outputs
+/results/dnn_weighted_efficiency/partials/

@@ -1,0 +1,68 @@
+{
+  "seeds": [
+    42,
+    123,
+    2026,
+    777,
+    31415
+  ],
+  "fixed_test_seed": 271828,
+  "fixed_test_sha256": "a8d075b34c272704c3171a010caf23993bb10b72e74dce510fc8aa770cd00bf7",
+  "test_events_per_class": 20000,
+  "mean_delta_auc": 0.006810732999999991,
+  "std_delta_auc": 0.00017190252184673467,
+  "positive_delta_count": 5,
+  "results": [
+    {
+      "seed": 42,
+      "basic_auc": 0.9462064568749999,
+      "allpairs_auc": 0.952966945,
+      "delta_auc": 0.006760488125000075,
+      "basic_accuracy": 0.75005,
+      "allpairs_accuracy": 0.7817666666666667,
+      "basic_recall": 0.8337,
+      "allpairs_recall": 0.8401
+    },
+    {
+      "seed": 123,
+      "basic_auc": 0.9454254049999999,
+      "allpairs_auc": 0.9524487225,
+      "delta_auc": 0.00702331750000007,
+      "basic_accuracy": 0.7492666666666666,
+      "allpairs_accuracy": 0.7815166666666666,
+      "basic_recall": 0.82015,
+      "allpairs_recall": 0.82275
+    },
+    {
+      "seed": 2026,
+      "basic_auc": 0.946062625,
+      "allpairs_auc": 0.952913213125,
+      "delta_auc": 0.006850588124999946,
+      "basic_accuracy": 0.7509166666666667,
+      "allpairs_accuracy": 0.78025,
+      "basic_recall": 0.82575,
+      "allpairs_recall": 0.81715
+    },
+    {
+      "seed": 777,
+      "basic_auc": 0.9457820775,
+      "allpairs_auc": 0.9526473656249999,
+      "delta_auc": 0.006865288124999869,
+      "basic_accuracy": 0.7489,
+      "allpairs_accuracy": 0.78265,
+      "basic_recall": 0.8374,
+      "allpairs_recall": 0.8378
+    },
+    {
+      "seed": 31415,
+      "basic_auc": 0.946015455625,
+      "allpairs_auc": 0.95256943875,
+      "delta_auc": 0.006553983124999996,
+      "basic_accuracy": 0.7499166666666667,
+      "allpairs_accuracy": 0.7824166666666666,
+      "basic_recall": 0.82895,
+      "allpairs_recall": 0.8331
+    }
+  ],
+  "note": "Unweighted balanced MC; fixed test sample; train/validation sampling and initialization varied. Standard deviation is across runs, not a physics significance or independent-test confidence interval."
+}

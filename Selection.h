@@ -111,6 +111,56 @@ RVecB JetMask(
     return mask;
 }
 
+
+// Preliminary jet selection for datasets without Jet_jetId.
+// WARNING: Tight Jet ID is NOT applied.
+inline RVecB JetMaskNoId(
+    const RVecF &pt,
+    const RVecF &eta,
+    const RVecF &phi,
+    const RVecF &muEta,
+    const RVecF &muPhi,
+    const RVecF &elEta,
+    const RVecF &elPhi)
+{
+    if (pt.size() != eta.size() ||
+        pt.size() != phi.size() ||
+        muEta.size() != muPhi.size() ||
+        elEta.size() != elPhi.size())
+        throw std::runtime_error("Object size mismatch");
+
+    RVecB mask(pt.size(), false);
+
+    for (size_t i = 0; i < pt.size(); ++i) {
+        if (pt[i] <= 30.f || std::abs(eta[i]) >= 2.4f)
+            continue;
+
+        bool overlap = false;
+
+        for (size_t j = 0; j < muEta.size(); ++j) {
+            if (DeltaR(eta[i], muEta[j],
+                       phi[i], muPhi[j]) < 0.4f) {
+                overlap = true;
+                break;
+            }
+        }
+
+        if (overlap) continue;
+
+        for (size_t j = 0; j < elEta.size(); ++j) {
+            if (DeltaR(eta[i], elEta[j],
+                       phi[i], elPhi[j]) < 0.4f) {
+                overlap = true;
+                break;
+            }
+        }
+
+        mask[i] = !overlap;
+    }
+
+    return mask;
+}
+
 } // namespace Selection
 
 #endif

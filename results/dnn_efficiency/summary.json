@@ -1,0 +1,37 @@
+{
+  "model": "C_all_pairs",
+  "test_events_per_class": 20000,
+  "sampling_seed": 20261110,
+  "ttHH_auc": 0.9522903043749998,
+  "thresholds": [
+    {
+      "target_signal_eff": 0.9,
+      "score_threshold": 0.2671440839767456,
+      "ttHH_eff": 0.9,
+      "HH_eff": 0.10285,
+      "ttbar_eff": 0.1702
+    },
+    {
+      "target_signal_eff": 0.8,
+      "score_threshold": 0.5616377592086792,
+      "ttHH_eff": 0.8,
+      "HH_eff": 0.0364,
+      "ttbar_eff": 0.0648
+    },
+    {
+      "target_signal_eff": 0.7,
+      "score_threshold": 0.7654704451560974,
+      "ttHH_eff": 0.7,
+      "HH_eff": 0.0174,
+      "ttbar_eff": 0.0268
+    },
+    {
+      "target_signal_eff": 0.5,
+      "score_threshold": 0.9377526044845581,
+      "ttHH_eff": 0.5,
+      "HH_eff": 0.00325,
+      "ttbar_eff": 0.0062
+    }
+  ],
+  "note": "Unweighted efficiencies on a class-balanced sample from held-out test files. Not full-MC signed-weight efficiencies."
+}

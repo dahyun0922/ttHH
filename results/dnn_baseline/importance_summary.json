@@ -1,0 +1,59 @@
+{
+  "baseline": {
+    "ttHH_auc": 0.9450370512499999,
+    "accuracy": 0.7500166666666667
+  },
+  "events_per_class": 20000,
+  "repeats": 5,
+  "results": [
+    {
+      "feature": "ST",
+      "auc_drop_mean": 0.662574742375,
+      "auc_drop_std": 0.0019935063591364575,
+      "accuracy_drop_mean": 0.47011333333333327
+    },
+    {
+      "feature": "HT",
+      "auc_drop_mean": 0.16233963812499996,
+      "auc_drop_std": 0.0021300750851719237,
+      "accuracy_drop_mean": 0.2741033333333333
+    },
+    {
+      "feature": "leading_lepton_pt",
+      "auc_drop_mean": 0.11958942362499994,
+      "auc_drop_std": 0.001085275083479034,
+      "accuracy_drop_mean": 0.13083666666666666
+    },
+    {
+      "feature": "PuppiMET_pt",
+      "auc_drop_mean": 0.09992549474999987,
+      "auc_drop_std": 0.0010469807687251823,
+      "accuracy_drop_mean": 0.11417333333333335
+    },
+    {
+      "feature": "nBJets",
+      "auc_drop_mean": 0.08214565937499996,
+      "auc_drop_std": 0.00042334980915392794,
+      "accuracy_drop_mean": 0.09183999999999999
+    },
+    {
+      "feature": "nSelectedJet",
+      "auc_drop_mean": 0.04471298312499994,
+      "auc_drop_std": 0.0007763161263051899,
+      "accuracy_drop_mean": 0.07202333333333333
+    },
+    {
+      "feature": "leading_jet_pt",
+      "auc_drop_mean": 0.010405320749999957,
+      "auc_drop_std": 0.00040588460419948435,
+      "accuracy_drop_mean": 0.05331000000000001
+    },
+    {
+      "feature": "subleading_jet_pt",
+      "auc_drop_mean": 0.0026421676249998916,
+      "auc_drop_std": 0.00012901670232799313,
+      "accuracy_drop_mean": 0.014129999999999998
+    }
+  ],
+  "note": "Unweighted held-out MC; not physical significance."
+}

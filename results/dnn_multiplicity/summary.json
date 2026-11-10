@@ -1,0 +1,241 @@
+{
+  "seed": 20261110,
+  "events_per_class": 20000,
+  "rows": [
+    {
+      "selection": "All events",
+      "background": "HH+ttbar",
+      "n_ttHH": 20000,
+      "n_background": 40000,
+      "auc_basic": 0.944913164375,
+      "auc_allpairs": 0.9522903043749998,
+      "delta_auc": 0.007377139999999893
+    },
+    {
+      "selection": "All events",
+      "background": "HH",
+      "n_ttHH": 20000,
+      "n_background": 20000,
+      "auc_basic": 0.9500529737499999,
+      "auc_allpairs": 0.96119085625,
+      "delta_auc": 0.01113788250000014
+    },
+    {
+      "selection": "All events",
+      "background": "ttbar",
+      "n_ttHH": 20000,
+      "n_background": 20000,
+      "auc_basic": 0.939773355,
+      "auc_allpairs": 0.9433897524999999,
+      "delta_auc": 0.0036163974999998683
+    },
+    {
+      "selection": "nB>=2",
+      "background": "HH+ttbar",
+      "n_ttHH": 17434,
+      "n_background": 15901,
+      "auc_basic": 0.9390456448443032,
+      "auc_allpairs": 0.9504759636236364,
+      "delta_auc": 0.011430318779333204
+    },
+    {
+      "selection": "nB>=2",
+      "background": "HH",
+      "n_ttHH": 17434,
+      "n_background": 8334,
+      "auc_basic": 0.9449824121905511,
+      "auc_allpairs": 0.9622236679709651,
+      "delta_auc": 0.017241255780414022
+    },
+    {
+      "selection": "nB>=2",
+      "background": "ttbar",
+      "n_ttHH": 17434,
+      "n_background": 7567,
+      "auc_basic": 0.9325071197929448,
+      "auc_allpairs": 0.9375374981775364,
+      "delta_auc": 0.005030378384591638
+    },
+    {
+      "selection": "nB>=2,nNonB>=2",
+      "background": "HH+ttbar",
+      "n_ttHH": 12980,
+      "n_background": 6998,
+      "auc_basic": 0.9213045516856898,
+      "auc_allpairs": 0.9387422765738483,
+      "delta_auc": 0.017437724888158534
+    },
+    {
+      "selection": "nB>=2,nNonB>=2",
+      "background": "HH",
+      "n_ttHH": 12980,
+      "n_background": 4879,
+      "auc_basic": 0.9403154805460084,
+      "auc_allpairs": 0.9596723055414056,
+      "delta_auc": 0.01935682499539715
+    },
+    {
+      "selection": "nB>=2,nNonB>=2",
+      "background": "ttbar",
+      "n_ttHH": 12980,
+      "n_background": 2119,
+      "auc_basic": 0.8775318655556776,
+      "auc_allpairs": 0.8905508601827621,
+      "delta_auc": 0.013018994627084446
+    },
+    {
+      "selection": "nB>=3,nNonB>=2",
+      "background": "HH+ttbar",
+      "n_ttHH": 7883,
+      "n_background": 419,
+      "auc_basic": 0.8625491488436038,
+      "auc_allpairs": 0.8809408905965739,
+      "delta_auc": 0.018391741752970092
+    },
+    {
+      "selection": "nB>=3,nNonB>=2",
+      "background": "HH",
+      "n_ttHH": 7883,
+      "n_background": 304,
+      "auc_basic": 0.9039974845937627,
+      "auc_allpairs": 0.9147906137123858,
+      "delta_auc": 0.010793129118623068
+    },
+    {
+      "selection": "nB>=3,nNonB>=2",
+      "background": "ttbar",
+      "n_ttHH": 7883,
+      "n_background": 115,
+      "auc_basic": 0.7529813743388359,
+      "auc_allpairs": 0.7914598834034714,
+      "delta_auc": 0.03847850906463546
+    },
+    {
+      "selection": "nB=2,nNonB=2",
+      "background": "HH+ttbar",
+      "n_ttHH": 1627,
+      "n_background": 3844,
+      "auc_basic": 0.8293986365616128,
+      "auc_allpairs": 0.8690020990734528,
+      "delta_auc": 0.03960346251183999
+    },
+    {
+      "selection": "nB=2,nNonB=2",
+      "background": "HH",
+      "n_ttHH": 1627,
+      "n_background": 2514,
+      "auc_basic": 0.8858559247073182,
+      "auc_allpairs": 0.9354958269340127,
+      "delta_auc": 0.049639902226694455
+    },
+    {
+      "selection": "nB=2,nNonB=2",
+      "background": "ttbar",
+      "n_ttHH": 1627,
+      "n_background": 1330,
+      "auc_basic": 0.7226816272395802,
+      "auc_allpairs": 0.7433139548317629,
+      "delta_auc": 0.020632327592182698
+    },
+    {
+      "selection": "nB=2,nNonB=3",
+      "background": "HH+ttbar",
+      "n_ttHH": 1629,
+      "n_background": 1866,
+      "auc_basic": 0.8276301652063318,
+      "auc_allpairs": 0.880766414208705,
+      "delta_auc": 0.05313624900237324
+    },
+    {
+      "selection": "nB=2,nNonB=3",
+      "background": "HH",
+      "n_ttHH": 1629,
+      "n_background": 1366,
+      "auc_basic": 0.8857723347057855,
+      "auc_allpairs": 0.939346957191533,
+      "delta_auc": 0.053574622485747514
+    },
+    {
+      "selection": "nB=2,nNonB=3",
+      "background": "ttbar",
+      "n_ttHH": 1629,
+      "n_background": 500,
+      "auc_basic": 0.6687857581338243,
+      "auc_allpairs": 0.7207243707796195,
+      "delta_auc": 0.051938612645795135
+    },
+    {
+      "selection": "nB=2,nNonB=4",
+      "background": "HH+ttbar",
+      "n_ttHH": 1065,
+      "n_background": 639,
+      "auc_basic": 0.8210231655976549,
+      "auc_allpairs": 0.8764956982374161,
+      "delta_auc": 0.05547253263976126
+    },
+    {
+      "selection": "nB=2,nNonB=4",
+      "background": "HH",
+      "n_ttHH": 1065,
+      "n_background": 507,
+      "auc_basic": 0.8706021798112806,
+      "auc_allpairs": 0.9285162652443257,
+      "delta_auc": 0.057914085433045104
+    },
+    {
+      "selection": "nB=2,nNonB=4",
+      "background": "ttbar",
+      "n_ttHH": 1065,
+      "n_background": 132,
+      "auc_basic": 0.6305946791862285,
+      "auc_allpairs": 0.6766894295063309,
+      "delta_auc": 0.04609475032010246
+    },
+    {
+      "selection": "nB=2,nNonB=5",
+      "background": "HH+ttbar",
+      "n_ttHH": 514,
+      "n_background": 183,
+      "auc_basic": 0.7874699666177629,
+      "auc_allpairs": 0.8599434415598224,
+      "delta_auc": 0.07247347494205947
+    },
+    {
+      "selection": "nB=2,nNonB=5",
+      "background": "HH",
+      "n_ttHH": 514,
+      "n_background": 153,
+      "auc_basic": 0.8352152793672593,
+      "auc_allpairs": 0.9093359782304621,
+      "delta_auc": 0.07412069886320283
+    },
+    {
+      "selection": "nB=3,nNonB=2",
+      "background": "HH+ttbar",
+      "n_ttHH": 2033,
+      "n_background": 236,
+      "auc_basic": 0.8428868583624435,
+      "auc_allpairs": 0.8664097476385404,
+      "delta_auc": 0.023522889276096914
+    },
+    {
+      "selection": "nB=3,nNonB=2",
+      "background": "HH",
+      "n_ttHH": 2033,
+      "n_background": 178,
+      "auc_basic": 0.8933579091064845,
+      "auc_allpairs": 0.9045772838059657,
+      "delta_auc": 0.0112193746994812
+    },
+    {
+      "selection": "nB=3,nNonB=3",
+      "background": "HH+ttbar",
+      "n_ttHH": 1770,
+      "n_background": 108,
+      "auc_basic": 0.7997489014438167,
+      "auc_allpairs": 0.8353081188533167,
+      "delta_auc": 0.035559217409499966
+    }
+  ],
+  "note": "Unweighted MC. Both models evaluated on identical new samples from held-out test files. The exact test events may differ from prior runs."
+}
