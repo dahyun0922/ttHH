@@ -1,12 +1,12 @@
 # ttHH 분류 DNN 연구 진행 요약
 
 > **범위:** 첫 DNN 구축부터 feature 개선·검증, 전체 MC의 generator-weighted efficiency 계산, 예비 물리 수율 추정까지
-> **분석 대상:** CMS Run III 2024 NanoAOD MC, \(\sqrt{s}=13.6\,\mathrm{TeV}\)
+> **분석 대상:** CMS Run III 2024 NanoAOD MC, (sqrt{s}=13.6TeV)
 > **상태:** 세 MC process에 대한 탐색적 분류 및 효율 평가 완료. 실제 충돌 데이터의 ttHH 신호 측정은 아직 수행하지 않음.
 
 ## 1. 연구 목적과 데이터
 
-목표는 **\(t\bar tHH\) (signal)** 이벤트를 **\(HH\), \(t\bar t\) (background)** 이벤트와 구분하는 DNN을 개발하고, 어떤 물리량이 분류 능력을 향상시키는지 확인하는 것이다. 세 sample은 동일한 포괄적 붕괴 채널을 공유하지 않는다.
+목표는 **ttbarHH (signal)** 이벤트를 **HH, ttbar (background)** 이벤트와 구분하는 DNN을 개발하고, 어떤 물리량이 분류 능력을 향상시키는지 확인하는 것이다. 세 sample은 동일한 포괄적 붕괴 채널을 공유하지 않는다.
 
 | Sample | 생성 채널의 특징 | 원본 ROOT 수 | 이벤트 수 |
 |---|---|---:|---:|
@@ -21,7 +21,7 @@
 
 입력 변수는 `nSelectedJet`, `nBJets`, `HT`, `ST`, `PuppiMET_pt`, `leading_jet_pt`, `subleading_jet_pt`, `leading_lepton_pt`의 8개였다. 신경망은 **Dense(64) → Dense(64) → Dense(32) → 3-class softmax** 구조이며, Adam optimizer와 early stopping을 사용했다.
 
-첫 실험에서 전체 테스트 정확도는 **74.87%**, ttHH one-vs-rest ROC-AUC는 **0.9441**이었다. 이어서 permutation importance와 ablation을 통해 `ST`, `HT`, lepton \(p_T\), MET 등 기본적인 이벤트 운동학 변수의 유용성을 조사했다. 특히 `ST`를 제거하면 AUC가 약 **0.9443 → 0.9352**로 낮아졌다. 다만 `ST`와 `HT` 등은 상관되어 있어 permutation importance를 독립적인 물리적 인과 기여도로 해석할 수 없다.
+첫 실험에서 전체 테스트 정확도는 **74.87%**, ttHH one-vs-rest ROC-AUC는 **0.9441**이었다. 이어서 permutation importance와 ablation을 통해 `ST`, `HT`, lepton p_T, MET 등 기본적인 이벤트 운동학 변수의 유용성을 조사했다. 특히 `ST`를 제거하면 AUC가 약 **0.9443 → 0.9352**로 낮아졌다. 다만 `ST`와 `HT` 등은 상관되어 있어 permutation importance를 독립적인 물리적 인과 기여도로 해석할 수 없다.
 
 ## 3. 재구성 후보에서 All-pairs feature로
 
@@ -30,7 +30,7 @@
 대신 이벤트 안의 **모든 b-jet pair**와 **모든 non-b jet pair**를 대상으로 다음 통계량을 계산했다.
 
 - 각 pair의 invariant mass: **min / mean / max**
-- 각 pair의 \(\Delta R\): **min / mean / max**
+- 각 pair의 delta_R: **min / mean / max**
 
 b-jet pair 6개 + non-b jet pair 6개를 기존 8개 변수에 더해 **총 20-feature All-pairs DNN**을 구성했다. pair가 없는 경우에는 통계량에 `-1`을 사용했다. 이 방법은 특정 Higgs/W 후보를 선택하지 않는다.
 
@@ -50,7 +50,7 @@ b-jet pair 6개 + non-b jet pair 6개를 기존 8개 변수에 더해 **총 20-f
 
 **Multi-seed 검증:** training/validation 샘플링과 모델 초기화를 바꾸는 **5개 seed**를 사용하고 동일한 test set으로 평가했다.
 
-| Seed | 기본 8개 AUC | All-pairs 20개 AUC | 차이 |
+| Seed(아무거나 정함) | 기본 8개 AUC | All-pairs 20개 AUC | 차이 |
 |---:|---:|---:|---:|
 | 42 | 0.94621 | 0.95297 | +0.00676 |
 | 123 | 0.94543 | 0.95245 | +0.00702 |
