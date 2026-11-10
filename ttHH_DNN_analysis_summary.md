@@ -58,24 +58,26 @@ b-jet pair 6개 + non-b jet pair 6개를 기존 8개 변수에 더해 **총 20-f
 | 777 | 0.94578 | 0.95265 | +0.00687 |
 | 31415 | 0.94602 | 0.95257 | +0.00655 |
 
-평균 개선량은 **$$\Delta\mathrm{AUC}=0.00681\pm0.00017$$**이며,
-이는 물리적 측정 오차나 독립적인 test 표본에 대한 신뢰구간은 아니다.
+
+평균 개선량은 $\Delta\mathrm{AUC}=0.00681\pm0.00017$이며, 이는 물리적 측정 오차나 독립적인 test 표본에 대한 신뢰구간은 아니다.
+
 
 ## 5. DNN score 기반 선택 효율
 
 3-class softmax 중 **ttHH score 하나**를 선택 기준으로 삼았다. MC의 실제 process가 무엇이든 같은 조건 \(s_{\mathrm{ttHH}}>c\)를 적용한다. 먼저 held-out test MC에서 ttHH 보존율 90%, 80%, 70%, 50%에 대응하는 score cut을 정하고 HH/ttbar 통과율을 비교했다.
 
-이후 **전체 481,311,216개 MC 이벤트**에 기존 20-feature 모델을 적용해
-signed `genWeight`를 반영한 효율을 계산했다.
 
-$$
+이후 **전체 481,311,216개 MC 이벤트**에 기존 20-feature 모델을 적용해 signed `genWeight`를 반영한 효율을 계산했다.
+
+```math
 \epsilon_k^{(w)}(c)
 =
 \frac{\sum_{i\in k,\;s_i>c} w_i^{\mathrm{gen}}}
 {\sum_{i\in k} w_i^{\mathrm{gen}}},
 \qquad
 R_B^{(w)}(c)=1-\epsilon_B^{(w)}(c).
-$$
+```
+
 
 | 기존 test 목표 | Score cut | 전체 ttHH 보존율 | 전체 HH 제거율 | 전체 ttbar 제거율 |
 |---|---:|---:|---:|---:|
